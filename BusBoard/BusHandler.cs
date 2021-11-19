@@ -16,7 +16,7 @@ namespace BusBoard
         {
             GenerateBuses();
             buses.ResponseList.Sort((x, y) => x.ExpectedArrival.CompareTo(y.ExpectedArrival));
-            for (int i = 0; i<5; i++)
+            for (int i = 0; i< Math.Min(5,buses.ResponseList.Count); i++)
             {
                 Console.WriteLine($"{buses.ResponseList[i].Route} to {buses.ResponseList[i].DestinationName}: Arriving in {(buses.ResponseList[i].ExpectedArrival - DateTime.Now).Minutes} Mins");
             }
