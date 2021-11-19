@@ -1,11 +1,13 @@
+using System.Collections.Generic;
 using RestSharp;
 
 namespace BusBoard
 {
     public class ApiHandler
     {
-        private string BaseUrl;
-        private IRestClient client;
+        public string BaseUrl;
+        public IRestClient client;
+        
 
         public ApiHandler(string baseUrl = "")
         {
@@ -18,18 +20,19 @@ namespace BusBoard
             BaseUrl = baseUrl;
             client = new RestClient(baseUrl);
         }
-
-        public TflResponse GetTflResponse(string requestString)
+        
+        
+        public string GetTflString(string requestString)
         {
-            RestRequest request = new RestRequest(requestString,DataFormat.Json);
-            return Execute<TflResponse>(request);
+            RestRequest request = new RestRequest(requestString);
+            return ExecuteString<List<TflIndividual>>(request);
         }
 
-        public T Execute<T>(RestRequest request) where T : new()
+        public string ExecuteString<T>(RestRequest request) where T : new()
         {
             var response = client.Execute<T>(request);
-            return response.Data;
+            return response.Content;
         }
-        
+
     }
 }

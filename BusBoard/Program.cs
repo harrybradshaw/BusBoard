@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using RestSharp;
 
@@ -8,8 +9,8 @@ namespace BusBoard
     {
         static void Main(string[] args)
         {
-            ApiHandler apiHandler = new ApiHandler("https://api.tfl.gov.uk");
-            TflResponse response = apiHandler.GetTflResponse("StopPoint/490008660N/Arrivals");
+            BusHandler busHandler = new BusHandler();
+            busHandler.PrintBuses();
         }
     }
 }

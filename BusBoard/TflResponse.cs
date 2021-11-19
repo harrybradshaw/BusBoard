@@ -1,9 +1,23 @@
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 
 namespace BusBoard
 {
     public class TflResponse
     {
-        public string id;
+        ApiHandler apiHandler = new ApiHandler("https://api.tfl.gov.uk");
+        public string ResponseString;
+        public List<TflIndividual> ResponseList = new List<TflIndividual>();
+
+        public void TflGetResponse()
+        {
+            ResponseString = apiHandler.GetTflString("StopPoint/490008660N/Arrivals");
+        }
+
+        public void GenerateList()
+        {
+            ResponseList = JsonConvert.DeserializeObject<List<TflIndividual>>(ResponseString);
+        }
     }
 }
