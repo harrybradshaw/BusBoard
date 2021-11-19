@@ -5,15 +5,25 @@ namespace BusBoard
     public class BusHandler
     {
         private TflResponse buses = new TflResponse();
-        
+        private string _stopCode;
         public void GenerateBuses()
         {
-            buses.TflGetResponse();
+            buses.TflGetResponse(_stopCode);
             buses.GenerateList();
         }
 
-        public void PrintBuses()
+        public void SetStopCode(string stopCode)
         {
+            _stopCode = stopCode;
+        }
+
+        public void PrintSingle(string stopCode = "")
+        {
+            if (stopCode is not null)
+            {
+                SetStopCode(stopCode);
+            }
+            
             GenerateBuses();
             buses.ResponseList.Sort((x, y) => x.ExpectedArrival.CompareTo(y.ExpectedArrival));
             for (int i = 0; i< Math.Min(5,buses.ResponseList.Count); i++)
