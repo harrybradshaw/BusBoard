@@ -27,6 +27,12 @@ namespace BusBoard
             RestRequest request = new RestRequest(requestString);
             return ExecuteString<List<TflIndividual>>(request);
         }
+        
+        public string GetString(string requestString)
+        {
+            RestRequest request = new RestRequest(requestString);
+            return client.Get(request).Content;
+        }
 
         public string ExecuteString<T>(RestRequest request) where T : new()
         {
