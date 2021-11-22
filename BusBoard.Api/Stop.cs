@@ -7,11 +7,17 @@ namespace BusBoard.Api
     public class Stop
     {
         public string StopCode;
+        public string Name;
+        public int Distance;
+        public string Indicator;
         public List<TflIndividual> ArrivalsList;
 
-        public Stop(string stopCode)
+        public Stop(string stopCode, string name, float distance, string indicator = "")
         {
             StopCode = stopCode;
+            Name = name;
+            Distance = (int)distance;
+            Indicator = indicator;
         }
         
         public void GetArrivals()

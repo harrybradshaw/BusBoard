@@ -6,8 +6,7 @@ namespace BusBoard
     {
         static void Main(string[] args)
         {
-            Location loc = new Location();
-            loc.SetPostcode("Nw4 2hf");
+            var loc = new Location("Nw6 1EH");
             loc.GetStops();
         }
     }

@@ -7,10 +7,10 @@
 <!DOCTYPE html>
 
 <div>
-    <h2>Find stops by postcode</h2>
+    <h2>Closest Stops By Postcode</h2>
     <form method="GET" action="arrivals">
         <input type="text" name="postcode" id="postcode"/>
-        <input type="submit" value="Find Arrivals">
+        <input type="submit" value="Find Stops & Arrivals">
     </form>
 </div>
 
@@ -23,10 +23,12 @@
         {
             @foreach (var stop in Model.Stops)
             {
+                <h3>@stop.Name - @stop.Indicator (@(stop.Distance+"m") away)</h3>
                 <ol>
-                    @foreach (var arrival in stop.ArrivalsList)
+                    @for (int i = 0; i < Math.Min(5,stop.ArrivalsList.Count);i++)
                     {
-                        <li>@arrival.Route to @arrival.DestinationName at @arrival.ExpectedArrival.ToShortTimeString()</li>
+                        <li><b>@stop.ArrivalsList[i].Route</b> to @stop.ArrivalsList[i].DestinationName at 
+                            @stop.ArrivalsList[i].ExpectedArrival.ToShortTimeString() (@((int)((stop.ArrivalsList[i].ExpectedArrival - DateTime.Now).TotalMinutes)) min)</li>
                     }
                 </ol>
             }

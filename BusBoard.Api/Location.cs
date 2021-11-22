@@ -1,5 +1,5 @@
+using System;
 using System.Collections.Generic;
-using BusBoard.Api.Models;
 
 namespace BusBoard.Api
 {
@@ -8,18 +8,17 @@ namespace BusBoard.Api
         public string Postcode;
         private string _lat;
         private string _lon;
-        private bool _isValid = false;
-        //public TflStopRes tflStopResp = new TflStopRes();
-        public List<Stop> Stops = new List<Stop>();
-
-        public void SetPostcode(string postcode)
+        private bool _isValid;
+        public List<Stop> Stops = new ();
+        
+        public Location(string postcode)
         {
             Postcode = postcode;
         }
 
         public void GetLatLon()
         { 
-            PostcodeResponse postcodeResponse = new PostcodeResponse();
+            var postcodeResponse = new PostcodeResponse();
             postcodeResponse.PostcodesGetResponse(Postcode);
             if (postcodeResponse.PostcodeInd.Pstres is not null)
             {
@@ -31,16 +30,20 @@ namespace BusBoard.Api
 
         public void GetStops()
         {
-            TflApi tflApi = new TflApi();
-            tflApi.GetStopCode(_lat,_lon);
-            foreach (var stopPoint in tflApi.StopRes.StopPoints)
+            if (_isValid)
             {
-                Stops.Add(new Stop(stopPoint.Id));
+                var tflApi = new TflApi();
+                tflApi.GetStopCode(_lat,_lon);
+                foreach (var stopPoint in tflApi.StopRes.StopPoints)
+                {
+                    var tempStop = new Stop(stopPoint.Id, stopPoint.Name, stopPoint.Distance, stopPoint.Indicator);
+                    tempStop.GetArrivals();
+                    Stops.Add(tempStop);
+                }
             }
-
-            foreach (var stop in Stops)
+            else
             {
-                stop.GetArrivals();
+                Console.WriteLine("Postcode is invalid!");
             }
         }
 

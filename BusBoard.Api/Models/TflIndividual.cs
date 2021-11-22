@@ -21,6 +21,8 @@ namespace BusBoard.Api.Models
     {
         [JsonProperty("id")] public string Id;
         [JsonProperty("distance")] public float Distance;
+        [JsonProperty("commonName")] public string Name;
+        [JsonProperty("indicator")] public string Indicator;
     }
     
 }

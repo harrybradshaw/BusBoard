@@ -10,11 +10,11 @@ namespace BusBoard.Web.Controllers
         [HttpGet("buses/arrivals")]
         public IActionResult Arrivals([FromQuery] string postcode)
         {
-            var location = new Location();
-            location.SetPostcode(postcode);
+            var location = new Location(postcode);
             location.GetLatLon();
             if (location.IsValid())
             {
+                Response.Headers.Add("Refresh","10");
                 location.GetStops();
             }
             return View(location);
