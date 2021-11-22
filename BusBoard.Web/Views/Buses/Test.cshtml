@@ -1,0 +1,12 @@
+@model BusBoard.Api.Location
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+<h2>Please enter a postcode!</h2>
+<form method="GET" action="/buses/arrivals">
+    <input type="text" name="postcode" id="postcode"/>
+    <input type="submit" value="Find Arrivals">
+</form>

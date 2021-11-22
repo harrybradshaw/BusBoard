@@ -1,0 +1,40 @@
+@model BusBoard.Api.Location
+
+@{
+    ViewData["Title"] = "Arrivals";
+}
+
+<!DOCTYPE html>
+
+<div>
+    <h2>Find stops by postcode</h2>
+    <form method="GET" action="arrivals">
+        <input type="text" name="postcode" id="postcode"/>
+        <input type="submit" value="Find Arrivals">
+    </form>
+</div>
+
+<div>
+    @if (Model.Postcode is not null)
+    {
+        <p>Postcode: @Model.Postcode</p>
+
+        @if (Model.Stops.Count > 0)
+        {
+            @foreach (var stop in Model.Stops)
+            {
+                <ol>
+                    @foreach (var arrival in stop.ArrivalsList)
+                    {
+                        <li>@arrival.Route to @arrival.DestinationName at @arrival.ExpectedArrival.ToShortTimeString()</li>
+                    }
+                </ol>
+            }
+        } else if (!Model.IsValid())
+        {
+            <p> The postcode is not valid. </p>
+        }                        
+        
+    }
+    
+</div>

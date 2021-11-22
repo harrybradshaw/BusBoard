@@ -1,16 +1,11 @@
 using System;
 
-namespace BusBoard
+namespace BusBoard.Api
 {
     public class BusHandler
     {
-        private TflResponse buses = new TflResponse();
+        private TflApi buses = new TflApi();
         private string _stopCode;
-        public void GenerateBuses()
-        {
-            buses.TflGetResponse(_stopCode);
-            buses.GenerateList();
-        }
 
         public void SetStopCode(string stopCode)
         {
@@ -19,13 +14,12 @@ namespace BusBoard
 
         public void PrintSingle(string stopCode = "", float distance = 0)
         {
-
             if (stopCode is not null)
             {
                 SetStopCode(stopCode);
             }
             
-            GenerateBuses();
+            buses.GetArrivals(_stopCode);
             if (distance != 0)
             {
                 Console.WriteLine($"{buses.ResponseList[0].StationName} ({distance}m away)");
@@ -42,17 +36,28 @@ namespace BusBoard
             }
         }
 
-        public void Part2(string postcode)
+        public void FindNearestTwo(string postcode = "")
         {
-            PostcodeResponse postcodeRes = new PostcodeResponse();
+            if (postcode == "")
+            {
+                Console.WriteLine("Please enter a postcode!");
+                string tempString = Console.ReadLine();
+                //postcode = new string (tempString.Where(c => !Char.IsWhiteSpace(c)).ToArray());
+                postcode = tempString;
+            }
+            var postcodeRes = new PostcodeResponse();
             postcodeRes.PostcodesGetResponse(postcode);
-            postcodeRes.ConvertString();
-            string lat = postcodeRes.PostcodeInd.pstres.lat;
-            string lon = postcodeRes.PostcodeInd.pstres.lon;
-            buses.TflGetStopCode(lat,lon);
-            buses.ParseStopCodeString();
-            PrintSingle(buses.StopRes.StopPoints[0].Id, buses.StopRes.StopPoints[0].Distance);
-            PrintSingle(buses.StopRes.StopPoints[1].Id, buses.StopRes.StopPoints[1].Distance);
+            buses.GetStopCode(postcodeRes.PostcodeInd.Pstres.Lat,postcodeRes.PostcodeInd.Pstres.Lon);
+            if (buses.StopRes.StopPoints.Count >= 2)
+            {
+                PrintSingle(buses.StopRes.StopPoints[0].Id, buses.StopRes.StopPoints[0].Distance);
+                PrintSingle(buses.StopRes.StopPoints[1].Id, buses.StopRes.StopPoints[1].Distance);
+            }
+            else
+            {
+                Console.WriteLine("The postcode provided was out of range/invalid.");
+            }
+            
         }
         
     }
